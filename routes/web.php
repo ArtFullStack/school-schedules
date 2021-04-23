@@ -12,7 +12,19 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Auth::routes();
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
+    Route::redirect('/', '/admin/dashboard');
+    Route::get('/dashboard', 'App\Http\Controllers\AdminController@index')->name('dashboard');
+    Route::resource('/classes', 'App\Http\Controllers\ClassController');
+    Route::resource('/teachers', 'App\Http\Controllers\TeacherController');
+    Route::resource('/schedule', 'App\Http\Controllers\ScheduleController');
+});
+
+
+
